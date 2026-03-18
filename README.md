@@ -1,4 +1,4 @@
-# This project is a Software engineering AI professor chatbot using google agent development kit "gemini-2.5-flash". We applied Huffman algorithm to reduce storage and transmission size of chat messages.
+### This project is a Software engineering AI professor chatbot using google agent development kit "gemini-2.5-flash". We applied Huffman algorithm to reduce storage and transmission size of chat messages.
 ________________________________________________________________________
 
 ### To run this project:
