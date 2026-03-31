@@ -5,10 +5,12 @@ import { ArrowRight, MoreVertical, Cpu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL ||
-  `${window.location.protocol}//${window.location.hostname}:3000`
-).replace(/\/$/, "");
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
+const API_BASE_URL = configuredApiUrl
+  ? configuredApiUrl.replace(/\/$/, "")
+  : import.meta.env.DEV
+    ? `${window.location.protocol}//${window.location.hostname}:3000`
+    : "";
 
 const MessageBubble = ({ message, isUserMessage, avatarSrc }) => (
   <div
@@ -89,6 +91,12 @@ export function ChatMain({ onHuffmanUpdate }) {
     setInputValue("");
 
     try {
+      if (!API_BASE_URL) {
+        throw new Error(
+          "Backend URL is not configured. Set VITE_API_URL in frontend deployment settings.",
+        );
+      }
+
       await fetch(`${API_BASE_URL}/api/userMessage`, {
         method: "POST",
         headers: {
@@ -135,7 +143,7 @@ export function ChatMain({ onHuffmanUpdate }) {
         );
       }
     } catch (error) {
-      alert("Failed to get response");
+      alert(error?.message || "Failed to get response");
       console.error("Error exchanging messages:", error);
     }
   };
