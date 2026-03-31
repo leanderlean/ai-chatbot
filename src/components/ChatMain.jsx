@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:3000"
+  import.meta.env.VITE_API_URL ||
+  `${window.location.protocol}//${window.location.hostname}:3000`
 ).replace(/\/$/, "");
 
 const MessageBubble = ({ message, isUserMessage, avatarSrc }) => (
