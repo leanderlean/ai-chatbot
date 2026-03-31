@@ -5,6 +5,10 @@ import { ArrowRight, MoreVertical, Cpu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:3000"
+).replace(/\/$/, "");
+
 const MessageBubble = ({ message, isUserMessage, avatarSrc }) => (
   <div
     className={cn(
@@ -84,7 +88,7 @@ export function ChatMain({ onHuffmanUpdate }) {
     setInputValue("");
 
     try {
-      await fetch("http://localhost:3000/api/userMessage", {
+      await fetch(`${API_BASE_URL}/api/userMessage`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,13 +96,18 @@ export function ChatMain({ onHuffmanUpdate }) {
         body: JSON.stringify({ userPrompt: newMessage.content }),
       });
 
-      const aiRes = await fetch("http://localhost:3000/api/aiResponse", {
+      const aiRes = await fetch(`${API_BASE_URL}/api/aiResponse`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userPrompt: newMessage.content }),
       });
+
+      if (!aiRes.ok) {
+        const errorData = await aiRes.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to get AI response");
+      }
 
       const data = await aiRes.json();
 

@@ -6,7 +6,7 @@ import aiRoutes from "./src/routes/aiRoutes.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use("/api", userMessageRoutes);
 app.use("/api", aiRoutes);
