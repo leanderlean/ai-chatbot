@@ -44,6 +44,8 @@ const MessageBubble = ({ message, isUserMessage, avatarSrc }) => (
 export function ChatMain({ onHuffmanUpdate }) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
+  const [isAwaitingGeminiResponse, setIsAwaitingGeminiResponse] =
+    useState(false);
   const messagesEndRef = useRef(null);
 
   const currentChatUser = {
@@ -78,7 +80,9 @@ export function ChatMain({ onHuffmanUpdate }) {
   }, [messages, onHuffmanUpdate]);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isAwaitingGeminiResponse) return;
+
+    setIsAwaitingGeminiResponse(true);
 
     const tempId = Date.now().toString();
     const newMessage = {
@@ -145,11 +149,13 @@ export function ChatMain({ onHuffmanUpdate }) {
     } catch (error) {
       alert(error?.message || "Failed to get response");
       console.error("Error exchanging messages:", error);
+    } finally {
+      setIsAwaitingGeminiResponse(false);
     }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !isAwaitingGeminiResponse) {
       handleSendMessage();
     }
   };
@@ -223,7 +229,7 @@ export function ChatMain({ onHuffmanUpdate }) {
             size="icon"
             className="rounded-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-500/25 shrink-0 text-white"
             onClick={handleSendMessage}
-            disabled={!inputValue.trim()}
+            disabled={!inputValue.trim() || isAwaitingGeminiResponse}
           >
             <ArrowRight className="w-4 h-4" />
           </Button>
