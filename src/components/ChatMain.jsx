@@ -5,6 +5,8 @@ import { ArrowRight, MoreVertical, Cpu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
+const CHAT_STORAGE_KEY = "huffman-chat-conversation";
+
 const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
 const API_BASE_URL = configuredApiUrl
   ? configuredApiUrl.replace(/\/$/, "")
@@ -43,7 +45,19 @@ const MessageBubble = ({ message, isUserMessage, avatarSrc }) => (
 
 export function ChatMain({ onHuffmanUpdate }) {
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    try {
+      const savedMessages = window.localStorage.getItem(CHAT_STORAGE_KEY);
+      return savedMessages ? JSON.parse(savedMessages) : [];
+    } catch (error) {
+      console.error("Failed to load saved chat conversation:", error);
+      return [];
+    }
+  });
   const [isAwaitingGeminiResponse, setIsAwaitingGeminiResponse] =
     useState(false);
   const messagesEndRef = useRef(null);
@@ -60,6 +74,14 @@ export function ChatMain({ onHuffmanUpdate }) {
 
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+    } catch (error) {
+      console.error("Failed to save chat conversation:", error);
+    }
   }, [messages]);
 
   // Update parent with latest Huffman stats whenever messages change
