@@ -54,6 +54,39 @@ export function encode(text, codes) {
     .join("");
 }
 
+export function packBitsToBuffer(bitString) {
+  if (!bitString || bitString.length === 0) {
+    return {
+      buffer: Buffer.alloc(0),
+      bitLength: 0,
+    };
+  }
+
+  const bitLength = bitString.length;
+  const paddedLength = Math.ceil(bitLength / 8) * 8;
+  const paddedBits = bitString.padEnd(paddedLength, "0");
+  const bytes = [];
+
+  for (let i = 0; i < paddedBits.length; i += 8) {
+    bytes.push(parseInt(paddedBits.slice(i, i + 8), 2));
+  }
+
+  return {
+    buffer: Buffer.from(bytes),
+    bitLength,
+  };
+}
+
+export function unpackBufferToBits(buffer, bitLength) {
+  if (!buffer || bitLength === 0) return "";
+
+  const bits = Array.from(buffer)
+    .map((byte) => byte.toString(2).padStart(8, "0"))
+    .join("");
+
+  return bits.slice(0, bitLength);
+}
+
 export function decode(encoded, tree) {
   let result = "";
   let current = tree;
@@ -72,7 +105,7 @@ export function decode(encoded, tree) {
 
 export function calculateCompression(original, encoded) {
   const originalBits = original.length * 8;
-  const compressedBits = encoded.length;
+  const compressedBits = typeof encoded === "string" ? encoded.length : encoded;
 
   const ratio = ((1 - compressedBits / originalBits) * 100).toFixed(2);
 

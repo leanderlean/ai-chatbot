@@ -5,6 +5,7 @@ import {
   generateCodes,
   encode,
   decode,
+  packBitsToBuffer,
   calculateCompression,
 } from "../huffman__algorithm/huffman.js";
 
@@ -35,31 +36,42 @@ const chatController = async (req, res) => {
     const userTree = buildHuffmanTree(userFreq);
     const userCodes = generateCodes(userTree);
     const userEncoded = encode(userPrompt, userCodes);
+    const userPacked = packBitsToBuffer(userEncoded);
     const userDecoded = decode(userEncoded, userTree);
-    const userCompression = calculateCompression(userPrompt, userEncoded);
+    const userCompression = calculateCompression(
+      userPrompt,
+      userPacked.bitLength,
+    );
 
     const botFreq = buildFrequencyMap(aiReply);
     const botTree = buildHuffmanTree(botFreq);
     const botCodes = generateCodes(botTree);
     const botEncoded = encode(aiReply, botCodes);
-    const botCompression = calculateCompression(aiReply, botEncoded);
+    const botPacked = packBitsToBuffer(botEncoded);
+    const botCompression = calculateCompression(aiReply, botPacked.bitLength);
 
     return res.json({
       success: true,
       user: {
         original: userPrompt,
         encoded: userEncoded,
+        encodedPackedBase64: userPacked.buffer.toString("base64"),
+        encodedPackedBytes: userPacked.buffer.length,
+        encodedBitLength: userPacked.bitLength,
         decoded: userDecoded,
         compression: userCompression,
-        tree: serializeTree(userTree), 
+        tree: serializeTree(userTree),
         codes: userCodes,
       },
       bot: {
         original: aiReply,
         encoded: botEncoded,
+        encodedPackedBase64: botPacked.buffer.toString("base64"),
+        encodedPackedBytes: botPacked.buffer.length,
+        encodedBitLength: botPacked.bitLength,
         compression: botCompression,
-        tree: serializeTree(botTree), 
-        codes: botCodes, 
+        tree: serializeTree(botTree),
+        codes: botCodes,
       },
     });
   } catch (error) {

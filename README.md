@@ -14,6 +14,9 @@ ________________________________________________________________________
    - 6.3. npm run dev
 
 
+- buffer for converting strings into binary code
+
+
  
 
 
