@@ -13,6 +13,14 @@ ________________________________________________________________________
    - 6.2. cd Backend 
    - 6.3. npm run dev
 
+## Deployment:
+1. Backend/server:
+   - resend
+2. Frontend:
+   - vercel
+  
+Try this:
+https://ai-chatbot-ivory-zeta.vercel.app/
 
 - buffer for converting strings into binary code
 
