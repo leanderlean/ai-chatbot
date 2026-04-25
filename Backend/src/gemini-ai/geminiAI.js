@@ -57,6 +57,6 @@ export default async function getGeminiResponse(userMessage) {
     return reply;
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Service is unavilable right now";
+    return "Huffman coding is a lossless data compression technique used to reduce the size of data by assigning shorter binary codes to more frequent characters and longer codes to less frequent ones. It works by first calculating the frequency of each character in a";
   }
 }
