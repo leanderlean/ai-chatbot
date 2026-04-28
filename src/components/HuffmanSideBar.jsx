@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Activity, TreePine, Binary } from "lucide-react";
+import { Activity, Binary } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { HuffmanTreeViz } from "./HuffmantreeVisualization";
 
 export const HuffmanSidebar = ({
   title,
@@ -10,7 +9,7 @@ export const HuffmanSidebar = ({
   colorClass,
   alignRight,
 }) => {
-  const [activeTab, setActiveTab] = useState("stream"); // 'stream', 'tree'
+  const [activeTab, setActiveTab] = useState("stream");
 
   if (!huffman) {
     return (
@@ -50,7 +49,6 @@ export const HuffmanSidebar = ({
         </span>
       </div>
 
-      {/* Tabs */}
       <div className="flex border-b bg-card/30">
         <button
           onClick={() => setActiveTab("stream")}
@@ -63,18 +61,6 @@ export const HuffmanSidebar = ({
         >
           <Binary className="w-3 h-3" />
           Binary Stream
-        </button>
-        <button
-          onClick={() => setActiveTab("tree")}
-          className={cn(
-            "flex-1 px-4 py-2 text-xs font-medium flex items-center justify-center gap-2 transition-colors",
-            activeTab === "tree"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          <TreePine className="w-3 h-3" />
-          Huffman Tree
         </button>
       </div>
 
@@ -113,13 +99,7 @@ export const HuffmanSidebar = ({
               </div>
             </div>
           </div>
-        ) : (
-          <HuffmanTreeViz
-            tree={huffman.tree}
-            codes={huffman.codes}
-            title={title}
-          />
-        )}
+        ) : null}
       </div>
     </div>
   );
