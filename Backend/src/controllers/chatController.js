@@ -32,6 +32,7 @@ const chatController = async (req, res) => {
 
     const aiReply = await getGeminiResponse(userPrompt);
 
+    // ===== USER HUFFMAN =====
     const userFreq = buildFrequencyMap(userPrompt);
     const userTree = buildHuffmanTree(userFreq);
     const userCodes = generateCodes(userTree);
@@ -43,12 +44,30 @@ const chatController = async (req, res) => {
       userPacked.bitLength,
     );
 
+    // ===== BOT HUFFMAN =====
     const botFreq = buildFrequencyMap(aiReply);
     const botTree = buildHuffmanTree(botFreq);
     const botCodes = generateCodes(botTree);
     const botEncoded = encode(aiReply, botCodes);
     const botPacked = packBitsToBuffer(botEncoded);
-    const botCompression = calculateCompression(aiReply, botPacked.bitLength);
+    const botCompression = calculateCompression(
+      aiReply,
+      botPacked.bitLength,
+    );
+
+    //  DEBUG LOGS 
+    console.log("---- HUFFMAN DEBUG ----");
+
+    console.log("USER:");
+    console.log("Original:", userPrompt);
+    console.log("Decoded matches:", userDecoded === userPrompt);
+    console.log("Compression:", userCompression);
+
+    console.log("BOT:");
+    console.log("Original:", aiReply);
+    console.log("Compression:", botCompression);
+
+    console.log("------------------------");
 
     return res.json({
       success: true,

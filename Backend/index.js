@@ -1,9 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import userMessageRoutes from "./src/routes/userMessageRoutes.js";
-import aiRoutes from "./src/routes/aiRoutes.js";
+import chatRoutes from "./src/routes/chatRoutes.js";
+
 const app = express();
+
 const corsOptions = {
   origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -13,12 +14,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 app.use(express.json());
+
+//  Mount ONLY the chat route 
+app.use("/api", chatRoutes);
+
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
 
-app.use("/api", userMessageRoutes);
-app.use("/api", aiRoutes);
-
 app.listen(PORT, HOST, () => {
-  console.log(`Server is running on port: http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
