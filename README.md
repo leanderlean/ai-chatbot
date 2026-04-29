@@ -22,8 +22,6 @@ ________________________________________________________________________
 Try this:
 https://ai-chatbot-ivory-zeta.vercel.app/
 
-- buffer for converting strings into binary code
-
 
  
 

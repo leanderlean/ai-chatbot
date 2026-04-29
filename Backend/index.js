@@ -6,7 +6,7 @@ import chatRoutes from "./src/routes/chatRoutes.js";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
