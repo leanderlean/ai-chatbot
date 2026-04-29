@@ -15,7 +15,7 @@ ________________________________________________________________________
 
 ## Deployment:
 1. Backend/server:
-   - resend
+   - render
 2. Frontend:
    - vercel
   
