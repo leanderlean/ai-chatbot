@@ -15,15 +15,4 @@
    - 6.2. cd Backend
    - 6.3. npm run dev
 
-## Deployment:
 
-1. Backend/server:
-   - render
-2. Frontend:
-   - vercel
-3. Frontend environment variables:
-   - set `VITE_API_URL` to your deployed backend URL, for example `https://your-backend.onrender.com`
-   - keep `CLIENT_ORIGIN` on the backend set to your frontend URL so CORS allows requests
-
-Try this:
-https://ai-chatbot-ivory-zeta.vercel.app/
