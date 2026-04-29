@@ -1,6 +1,4 @@
-// =====================
-// Huffman Node
-// =====================
+
 class HuffmanNode {
   constructor(char, freq, left = null, right = null) {
     this.char = char;
@@ -10,9 +8,6 @@ class HuffmanNode {
   }
 }
 
-// =====================
-// Build Frequency Map
-// =====================
 export function buildFrequencyMap(text) {
   const freqMap = {};
   for (let char of text) {
@@ -21,9 +16,6 @@ export function buildFrequencyMap(text) {
   return freqMap;
 }
 
-// =====================
-// Build Huffman Tree (STABLE)
-// =====================
 export function buildHuffmanTree(freqMap) {
   let nodes = [];
 
@@ -31,11 +23,11 @@ export function buildHuffmanTree(freqMap) {
     nodes.push(new HuffmanNode(char, freqMap[char]));
   }
 
-  // Edge case: empty input
+  
   if (nodes.length === 0) return null;
 
   while (nodes.length > 1) {
-    // Stable sort (important!)
+    
     nodes.sort((a, b) => {
       if (a.freq !== b.freq) return a.freq - b.freq;
       return (a.char || "").localeCompare(b.char || "");
@@ -57,15 +49,13 @@ export function buildHuffmanTree(freqMap) {
   return nodes[0];
 }
 
-// =====================
-// Generate Codes
-// =====================
+
 export function generateCodes(node, prefix = "", codeMap = {}) {
   if (!node) return codeMap;
 
   // Leaf node
   if (node.char !== null) {
-    codeMap[node.char] = prefix || "0"; // handle single char case
+    codeMap[node.char] = prefix || "0"; 
     return codeMap;
   }
 
@@ -75,9 +65,6 @@ export function generateCodes(node, prefix = "", codeMap = {}) {
   return codeMap;
 }
 
-// =====================
-// Encode Text → Bit String
-// =====================
 export function encode(text, codes) {
   return text
     .split("")
@@ -90,9 +77,6 @@ export function encode(text, codes) {
     .join("");
 }
 
-// =====================
-// Pack Bits → Buffer
-// =====================
 export function packBitsToBuffer(bitString) {
   if (!bitString || bitString.length === 0) {
     return {
@@ -117,9 +101,6 @@ export function packBitsToBuffer(bitString) {
   };
 }
 
-// =====================
-// Unpack Buffer → Bits
-// =====================
 export function unpackBufferToBits(buffer, bitLength) {
   if (!buffer || bitLength === 0) return "";
 
@@ -130,9 +111,6 @@ export function unpackBufferToBits(buffer, bitLength) {
   return bits.slice(0, bitLength);
 }
 
-// =====================
-// Decode Bits → Text (SAFE)
-// =====================
 export function decode(encoded, tree) {
   if (!tree) return "";
 
@@ -152,7 +130,6 @@ export function decode(encoded, tree) {
     }
   }
 
-  // Ensure no leftover partial traversal
   if (current !== tree) {
     throw new Error("Incomplete bit sequence");
   }
@@ -160,9 +137,6 @@ export function decode(encoded, tree) {
   return result;
 }
 
-// =====================
-// Compression Wrapper
-// =====================
 export function compress(text) {
   if (!text || text.length === 0) {
     return {
@@ -182,13 +156,11 @@ export function compress(text) {
   return {
     buffer,
     bitLength,
-    freqMap, // REQUIRED for decoding
+    freqMap, 
   };
 }
 
-// =====================
-// Decompression Wrapper
-// =====================
+
 export function decompress({ buffer, bitLength, freqMap }) {
   if (!buffer || bitLength === 0) return "";
 
@@ -198,9 +170,6 @@ export function decompress({ buffer, bitLength, freqMap }) {
   return decode(bits, tree);
 }
 
-// =====================
-// Compression Stats
-// =====================
 export function calculateCompression(original, bitLength) {
   const originalBits = original.length * 8;
   const compressedBits = bitLength;

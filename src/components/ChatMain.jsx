@@ -15,9 +15,7 @@ const API_BASE_URL = configuredApiUrl
 
 const MessageBubble = ({ message, isUserMessage }) => (
   <div
-    className={`flex items-start gap-3 ${
-      isUserMessage ? "justify-end" : ""
-    }`}
+    className={`flex items-start gap-3 ${isUserMessage ? "justify-end" : ""}`}
   >
     <div
       className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-lg ${
@@ -122,7 +120,6 @@ export function ChatMain({ onHuffmanUpdate }) {
 
   return (
     <div className="flex flex-col h-full bg-[#1a1a1a] w-full">
-
       {/* HEADER (RESTORED) */}
       <div className="flex items-center justify-between border-b border-gray-800 px-6 py-4 bg-[#1e1e1e]">
         <div className="flex items-center gap-3">
@@ -133,10 +130,8 @@ export function ChatMain({ onHuffmanUpdate }) {
           </Avatar>
 
           <div>
-            <h2 className="text-white font-semibold">Professor SeAi</h2>
-            <p className="text-xs text-gray-400">
-              Huffman Compression Chatbot
-            </p>
+            <h2 className="text-white font-semibold">Professor Huffman</h2>
+            <p className="text-xs text-gray-400">Huffman Compression Chatbot</p>
           </div>
         </div>
 
