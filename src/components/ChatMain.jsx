@@ -13,6 +13,17 @@ const API_BASE_URL = configuredApiUrl
     ? `${window.location.protocol}//${window.location.hostname}:3000`
     : "";
 
+async function readErrorMessage(response) {
+  const contentType = response.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    const payload = await response.json().catch(() => null);
+    return payload?.message || payload?.error || null;
+  }
+
+  const bodyText = await response.text().catch(() => "");
+  return bodyText.trim().slice(0, 180) || null;
+}
+
 const MessageBubble = ({ message, isUserMessage }) => (
   <div
     className={`flex items-start gap-3 ${isUserMessage ? "justify-end" : ""}`}
@@ -91,6 +102,21 @@ export function ChatMain({ onHuffmanUpdate }) {
         },
         body: JSON.stringify({ userPrompt: userMsg.content }),
       });
+
+      if (!res.ok) {
+        const errorMessage = await readErrorMessage(res);
+        throw new Error(
+          errorMessage || `Request failed with status ${res.status}`,
+        );
+      }
+
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        const responseText = await res.text();
+        throw new Error(
+          `Expected JSON from the backend, but got ${contentType || "an unknown response type"}: ${responseText.slice(0, 180)}`,
+        );
+      }
 
       const data = await res.json();
 
